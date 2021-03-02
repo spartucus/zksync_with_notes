@@ -14,6 +14,7 @@ use zksync_crypto::params as franklin_constants;
 // Local deps
 use crate::utils::{allocate_bits_vector, pack_bits_to_element, reverse_bytes};
 
+// What's the meaning of 'le' in `bits_le`?
 #[derive(Clone)]
 pub struct CircuitElement<E: Engine> {
     number: AllocatedNum<E>,
@@ -332,6 +333,7 @@ impl<E: Engine> CircuitElement<E> {
     }
 }
 
+// What's the meanings of x, y?
 #[derive(Clone)]
 pub struct CircuitPubkey<E: RescueEngine + JubjubEngine> {
     x: CircuitElement<E>,

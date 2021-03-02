@@ -8,6 +8,8 @@ use crate::element::CircuitElement;
 use zksync_crypto::circuit::account::CircuitAccount;
 use zksync_crypto::franklin_crypto::rescue::RescueEngine;
 
+// Tengfei: What's difference between AccountWitness and CircuitAccount?
+// Why CircuitAccount has one more subtree field that AccountWitness don't?
 #[derive(Clone, Debug)]
 pub struct AccountWitness<E: RescueEngine> {
     pub nonce: Option<E::Fr>,
@@ -25,6 +27,7 @@ impl<E: RescueEngine> AccountWitness<E> {
     }
 }
 
+// Does this mean that AccountWitness is the more rawer one?
 pub struct AccountContent<E: RescueEngine> {
     pub nonce: CircuitElement<E>,
     pub pub_key_hash: CircuitElement<E>,
