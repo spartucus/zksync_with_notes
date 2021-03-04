@@ -630,6 +630,7 @@ pub fn get_used_subtree_root_hash(account_tree: &CircuitAccountTree) -> Fr {
     current_hash
 }
 
+// okey, this looks like a very important entry
 pub fn build_block_witness<'a>(
     account_tree: &'a mut CircuitAccountTree,
     block: &Block,
