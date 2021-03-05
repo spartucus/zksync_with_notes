@@ -16,13 +16,14 @@ ZKSync under the hood
 
    It starts with a prometheus data exporter and a prover server.
 
-   Then the prover server repeatedly check if database has available witness data, if it has, then it convert witness data into pub data, and then insert back into database. BTW, zksync use PostgreSQL as their database.
+   Then the prover server repeatedly check if database has available witness data, if it has, then it convert witness
+   data into pub data, and then insert back into database. BTW, zksync use PostgreSQL as their database.
 
    Question:
 
-   * what's prometheus data exporter? 
-     * It's used for event monitoring and alerting. It monitor application's health.
-   * what does `update_prover_job_queue` and `maintain` mean?
+   - what's prometheus data exporter?
+     - It's used for event monitoring and alerting. It monitor application's health.
+   - what does `update_prover_job_queue` and `maintain` mean?
 
 2. Prove
 
