@@ -2,18 +2,18 @@ ZKSync under the hood
 
 0. Precedure
 
-    When users do a Layer2 transaction, there are should following precedures:
+   When users do a Layer2 transaction, there are should following precedures:
 
-    Users must first register his public key first, WHY?
+   Users must first register his public key first, WHY?
 
-    Wallet packs the transaction, signs it.
+   Wallet packs the transaction, signs it.
 
-    This should be wallet side or server API side, we need find its entry and how it did.
+   This should be wallet side or server API side, we need find its entry and how it did.
 
-    Question:
+   Question:
 
-    * what's commitment and proof in ZKRollup?
-    * what's state hash and verify key?
+   - what's commitment and proof in ZKRollup?
+   - what's state hash and verify key?
 
 1. Witness
 
