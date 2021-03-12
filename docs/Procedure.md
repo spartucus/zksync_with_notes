@@ -16,6 +16,12 @@ ZKSync under the hood
    - what's commitment and proof in ZKRollup?
    - what's state hash and verify key?
    - when transaction done on Layer2, the balance updated immediately, does this mean are there no double-spent issues?
+   - what's witness and pub data?
+   - Is pub data same as parameters?
+   - What're the differences between `CircuitAccount` in `core/lib/crypto/src/circuit/account.rs` and
+     `AccountWitness`/`AccountContent` in `core/lib/circuit/src/account.rs`?
+   - If we write Rust circuits, how do we write same logic code of solidity?
+   - And how could we test circuit to see if it is right?
 
 1. Witness
 
@@ -34,8 +40,16 @@ ZKSync under the hood
 
 2. Prove
 
+   It is done by layer2 prover server.
+
 3. Submit
+
+   It is done by layer2 eth sender server.
 
 4. Verify
 
+   It is done on the layer1 contract side.
+
 5. Finalize
+
+   It is done on the layer1 contract side.
