@@ -44,11 +44,11 @@ use crate::{
 
 const DIFFERENT_TRANSACTIONS_TYPE_NUMBER: usize = 9;
 pub struct ZkSyncCircuit<'a, E: RescueEngine + JubjubEngine> {
-    pub rescue_params: &'a <E as RescueEngine>::Params,
-    pub jubjub_params: &'a <E as JubjubEngine>::Params,
+    pub rescue_params: &'a <E as RescueEngine>::Params, // TF: meaning?
+    pub jubjub_params: &'a <E as JubjubEngine>::Params, // TF: meaning?
     /// The old root of the tree
     pub old_root: Option<E::Fr>,
-    pub initial_used_subtree_root: Option<E::Fr>,
+    pub initial_used_subtree_root: Option<E::Fr>, // TF: meaning?
 
     pub block_number: Option<E::Fr>,
     pub validator_address: Option<E::Fr>,
@@ -58,7 +58,7 @@ pub struct ZkSyncCircuit<'a, E: RescueEngine + JubjubEngine> {
     pub operations: Vec<Operation<E>>,
 
     pub validator_balances: Vec<Option<E::Fr>>,
-    pub validator_audit_path: Vec<Option<E::Fr>>,
+    pub validator_audit_path: Vec<Option<E::Fr>>, // TF: meaning?
     pub validator_account: AccountWitness<E>,
 }
 
