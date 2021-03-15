@@ -200,7 +200,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
             data
         };
 
-        assert_eq!(pubdata_holder.len(), DIFFERENT_TRANSACTIONS_TYPE_NUMBER);
+        assert_eq!(pubdata_holder.len(), DIFFERENT_TRANSACTIONS_TYPE_NUMBER); // TF: not necessary?!
 
         // Main cycle that processes operations:
         for (i, operation) in self.operations.iter().enumerate() {
@@ -215,6 +215,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
             global_variables.chunk_data = chunk_data;
             next_chunk_number = next_chunk;
             let operation_pub_data_chunk = CircuitElement::from_fe_with_known_length(
+                // TF: what's the meaning?
                 cs.namespace(|| "operation_pub_data_chunk"),
                 || operation.clone().pubdata_chunk.grab(),
                 params::CHUNK_BIT_WIDTH,
@@ -239,6 +240,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                         )?));
                     }
                     multi_or(cs.namespace(|| "is_chunk_onchain_op"), &onchain_op_flags)?
+                    // TF: multiple or?
                 };
                 let should_set_onchain_commitment_flag = Boolean::and(
                     cs.namespace(|| "is_first_chunk_oncahin_op"),
@@ -247,9 +249,9 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                 )?;
 
                 block_onchain_op_commitment_bits
-                    .extend_from_slice(&vec![Boolean::constant(false); 7]);
+                    .extend_from_slice(&vec![Boolean::constant(false); 7]); // TF: WHY 7?
                 block_onchain_op_commitment_bits.push(should_set_onchain_commitment_flag);
-            }
+            } // TF: deal on chain settings?
 
             let lhs =
                 AllocatedOperationBranch::from_witness(cs.namespace(|| "lhs"), &operation.lhs)?;
@@ -277,7 +279,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                 |lc| lc + state_root.get_variable(),
                 |lc| lc + CS::one(),
                 |lc| lc + rolling_root.get_variable(),
-            );
+            ); // TF: a * b = c?
 
             self.execute_op(
                 cs.namespace(|| "execute_op"),
@@ -294,6 +296,8 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                 &mut prev,
                 &mut pubdata_holder,
             )?;
+
+            // TF: why do this again?
             let (new_state_root, _, _) = check_account_data(
                 cs.namespace(|| "calculate new account root"),
                 &current_branch,
@@ -539,7 +543,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                 |lc| lc + public_data_commitment.get_variable(),
                 |lc| lc + CS::one(),
                 |lc| lc + final_hash.get_variable(),
-            );
+            ); // TF: pub_data_commitment = new_hash?
         }
         Ok(())
     }
@@ -725,7 +729,7 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
             |lc| lc + rhs.token.get_number().get_variable(),
         );
 
-        let diff_token_numbers = max_token_id - Expression::from(&lhs.token.get_number());
+        let diff_token_numbers = max_token_id - Expression::from(&lhs.token.get_number()); // TF: 128 - number ?
 
         let _ = diff_token_numbers.into_bits_le_fixed(
             cs.namespace(|| "token number is smaller than processable number"),
@@ -751,10 +755,11 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
             cs.namespace(|| "assert generator y is constant"),
             &public_generator_y,
         )?;
+        // TF: what's the meanings of generator?
 
         let op_data =
             AllocatedOperationData::from_witness(cs.namespace(|| "allocated_operation_data"), op)?;
-        // ensure op_data is equal to previous
+        // ensure op_data is equal to previous // TF: why?
         {
             let mut is_op_data_correct_flags = vec![];
             is_op_data_correct_flags.push(CircuitElement::equals(
@@ -821,7 +826,7 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
                 &Boolean::constant(true),
             )?;
         }
-        prev.op_data = op_data.clone();
+        prev.op_data = op_data.clone(); // TF: if previus data is equal to op_data, why do the update?
 
         let signer_key = unpack_point_if_possible(
             cs.namespace(|| "unpack pubkey"),

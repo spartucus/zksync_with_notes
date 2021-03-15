@@ -22,6 +22,7 @@ ZKSync under the hood
      `AccountWitness`/`AccountContent` in `core/lib/circuit/src/account.rs`?
    - If we write Rust circuits, how do we write same logic code of solidity?
    - And how could we test circuit to see if it is right?
+   - when does `synthesize` be called?
 
 1. Witness
 
