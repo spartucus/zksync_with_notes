@@ -8,7 +8,13 @@ All notable changes to the core components will be documented in this file.
 
 ### Changed
 
+- (`loadtest`): `zksync_fee` has been moved to `[main_wallet]` section from the `[network]` section.
+
 ### Added
+
+- (`loadtest`): Added `zksync_fee` option into the `[scenario]` section to set fee for each scenario individually, added
+  `fee_token` option into the `[main_wallet]` section to set token that is used to pay fees for the main wallet
+  operations.
 
 ### Fixed
 
@@ -28,6 +34,8 @@ All notable changes to the core components will be documented in this file.
 - Possibility to use CREATE2 ChangePubKey and Transfer in a single batch.
 
 ### Fixed
+
+- Bug with the assignment of new account ids in the state.
 
 ## Release 2021-02-02
 
