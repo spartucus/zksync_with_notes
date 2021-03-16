@@ -44,11 +44,11 @@ use crate::{
 
 const DIFFERENT_TRANSACTIONS_TYPE_NUMBER: usize = 9;
 pub struct ZkSyncCircuit<'a, E: RescueEngine + JubjubEngine> {
-    pub rescue_params: &'a <E as RescueEngine>::Params, // TF: meaning?
-    pub jubjub_params: &'a <E as JubjubEngine>::Params, // TF: meaning?
+    pub rescue_params: &'a <E as RescueEngine>::Params, // TF: meaning? A: curve parameters
+    pub jubjub_params: &'a <E as JubjubEngine>::Params, // TF: meaning? A: curve parameters
     /// The old root of the tree
-    pub old_root: Option<E::Fr>,
-    pub initial_used_subtree_root: Option<E::Fr>, // TF: meaning?
+    pub old_root: Option<E::Fr>,    // A: all 32 level root
+    pub initial_used_subtree_root: Option<E::Fr>, // TF: meaning? A: 24 level root
 
     pub block_number: Option<E::Fr>,
     pub validator_address: Option<E::Fr>,
@@ -58,7 +58,7 @@ pub struct ZkSyncCircuit<'a, E: RescueEngine + JubjubEngine> {
     pub operations: Vec<Operation<E>>,
 
     pub validator_balances: Vec<Option<E::Fr>>,
-    pub validator_audit_path: Vec<Option<E::Fr>>, // TF: meaning?
+    pub validator_audit_path: Vec<Option<E::Fr>>, // TF: meaning? A: merkle path
     pub validator_account: AccountWitness<E>,
 }
 
@@ -241,7 +241,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                         )?));
                     }
                     multi_or(cs.namespace(|| "is_chunk_onchain_op"), &onchain_op_flags)?
-                    // TF: multiple or?
+                    // TF: multiple or? A: multi or
                 };
                 let should_set_onchain_commitment_flag = Boolean::and(
                     cs.namespace(|| "is_first_chunk_oncahin_op"),
@@ -250,7 +250,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                 )?;
 
                 block_onchain_op_commitment_bits
-                    .extend_from_slice(&vec![Boolean::constant(false); 7]); // TF: WHY 7?
+                    .extend_from_slice(&vec![Boolean::constant(false); 7]); // TF: WHY 7? A: 8 bits minus 1
                 block_onchain_op_commitment_bits.push(should_set_onchain_commitment_flag);
             } // TF: deal on chain settings?
 
@@ -730,7 +730,7 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
             |lc| lc + rhs.token.get_number().get_variable(),
         );
 
-        let diff_token_numbers = max_token_id - Expression::from(&lhs.token.get_number()); // TF: 128 - number ?
+        let diff_token_numbers = max_token_id - Expression::from(&lhs.token.get_number()); // TF: 128 - number ? A: yes
 
         let _ = diff_token_numbers.into_bits_le_fixed(
             cs.namespace(|| "token number is smaller than processable number"),
@@ -756,7 +756,7 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
             cs.namespace(|| "assert generator y is constant"),
             &public_generator_y,
         )?;
-        // TF: what's the meanings of generator?
+        // TF: what's the meanings of generator? A: for curvue
 
         let op_data =
             AllocatedOperationData::from_witness(cs.namespace(|| "allocated_operation_data"), op)?;

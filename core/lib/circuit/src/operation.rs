@@ -32,7 +32,7 @@ pub struct Operation<E: RescueEngine> {
     pub chunk: Option<E::Fr>,
     pub pubdata_chunk: Option<E::Fr>,
     pub signer_pub_key_packed: Vec<Option<bool>>,
-    pub first_sig_msg: Option<E::Fr>, // TF: why separate msg into 3 parts?
+    pub first_sig_msg: Option<E::Fr>, // TF: why separate msg into 3 parts? A: need enough room to save msg. one Fr just 32.
     pub second_sig_msg: Option<E::Fr>,
     pub third_sig_msg: Option<E::Fr>,
     pub signature_data: SignatureData,
@@ -43,8 +43,8 @@ pub struct Operation<E: RescueEngine> {
 
 #[derive(Clone, Debug)]
 pub struct OperationArguments<E: RescueEngine> {
-    pub a: Option<E::Fr>,
-    pub b: Option<E::Fr>,
+    pub a: Option<E::Fr>,   // sender's balance
+    pub b: Option<E::Fr>,   // receiver's balance
     pub amount_packed: Option<E::Fr>,
     pub full_amount: Option<E::Fr>,
     pub fee: Option<E::Fr>,

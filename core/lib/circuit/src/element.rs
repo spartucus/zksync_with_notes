@@ -14,7 +14,7 @@ use zksync_crypto::params as franklin_constants;
 // Local deps
 use crate::utils::{allocate_bits_vector, pack_bits_to_element, reverse_bytes};
 
-// TF: What's the meaning of 'le' in `bits_le`?
+// TF: What's the meaning of 'le' in `bits_le`? A: little endian
 #[derive(Clone)]
 pub struct CircuitElement<E: Engine> {
     number: AllocatedNum<E>,
