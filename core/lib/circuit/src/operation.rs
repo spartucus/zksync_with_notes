@@ -32,7 +32,7 @@ pub struct Operation<E: RescueEngine> {
     pub chunk: Option<E::Fr>,
     pub pubdata_chunk: Option<E::Fr>,
     pub signer_pub_key_packed: Vec<Option<bool>>,
-    pub first_sig_msg: Option<E::Fr>,
+    pub first_sig_msg: Option<E::Fr>, // TF: why separate msg into 3 parts?
     pub second_sig_msg: Option<E::Fr>,
     pub third_sig_msg: Option<E::Fr>,
     pub signature_data: SignatureData,

@@ -94,7 +94,7 @@ struct PreviousData<E: RescueEngine> {
 
 // Implementation of our circuit:
 impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
-    // TF: when every time generating a circuit, we should call this method?
+    // TF: Does every time generating a circuit, we should call this method?
     fn synthesize<CS: ConstraintSystem<E>>(self, cs: &mut CS) -> Result<(), SynthesisError> {
         let zero = AllocatedNum::alloc(cs.namespace(|| "allocate element equal to zero"), || {
             Ok(E::Fr::zero())

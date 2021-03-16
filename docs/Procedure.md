@@ -23,6 +23,9 @@ ZKSync under the hood
    - If we write Rust circuits, how do we write same logic code of solidity?
    - And how could we test circuit to see if it is right?
    - when does `synthesize` be called?
+   - when does `SRS/CRS` generated?
+   - when to `proving`?
+   - when to `verify`?
 
 1. Witness
 
