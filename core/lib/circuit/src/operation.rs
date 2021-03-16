@@ -43,8 +43,8 @@ pub struct Operation<E: RescueEngine> {
 
 #[derive(Clone, Debug)]
 pub struct OperationArguments<E: RescueEngine> {
-    pub a: Option<E::Fr>,   // sender's balance
-    pub b: Option<E::Fr>,   // receiver's balance
+    pub a: Option<E::Fr>, // sender's balance
+    pub b: Option<E::Fr>, // receiver's balance
     pub amount_packed: Option<E::Fr>,
     pub full_amount: Option<E::Fr>,
     pub fee: Option<E::Fr>,

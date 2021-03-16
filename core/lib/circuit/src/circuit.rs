@@ -47,8 +47,8 @@ pub struct ZkSyncCircuit<'a, E: RescueEngine + JubjubEngine> {
     pub rescue_params: &'a <E as RescueEngine>::Params, // TF: meaning? A: curve parameters
     pub jubjub_params: &'a <E as JubjubEngine>::Params, // TF: meaning? A: curve parameters
     /// The old root of the tree
-    pub old_root: Option<E::Fr>,    // A: all 32 level root
-    pub initial_used_subtree_root: Option<E::Fr>, // TF: meaning? A: 24 level root
+    pub old_root: Option<E::Fr>, // A: all 32 level root
+    pub initial_used_subtree_root: Option<E::Fr>,       // TF: meaning? A: 24 level root
 
     pub block_number: Option<E::Fr>,
     pub validator_address: Option<E::Fr>,
