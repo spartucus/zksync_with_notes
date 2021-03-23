@@ -58,11 +58,11 @@ ZKSync under the hood
 
    It is done on the layer1 contract side.
 
-
 6. TODO:
 
    There are several structs that we need to define:
-   * witness
-   * operation in types
-   * tx in types
-   * account
+
+   - witness
+   - operation in types
+   - tx in types
+   - account
