@@ -990,6 +990,21 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
             &signature_data.is_verified,
             &mut previous_pubdatas[ForcedExitOp::OP_CODE as usize],
         )?);
+        op_flags.push(self.create_pair(
+            cs.namespace(|| "create_pair"),
+            &mut cur,
+            &lhs,
+            &rhs,
+            global_variables,
+            &is_a_geq_b,
+            &is_account_empty,
+            &op_data,
+            &signer_key,
+            &ext_pubdata_chunk,
+            &is_valid_timestamp,
+            &signature_data.is_verified,
+            &mut previous_pubdatas[CreatePairOp::OP_CODE as usize],
+        )?);
 
         assert_eq!(DIFFERENT_TRANSACTIONS_TYPE_NUMBER - 1, op_flags.len());
 
