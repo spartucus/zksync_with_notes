@@ -2,6 +2,7 @@
 
 mod change_pubkey;
 mod close;
+mod create_pair;
 mod forced_exit;
 mod primitives;
 mod transfer;
@@ -19,6 +20,7 @@ pub use self::{
         ChangePubKey, ChangePubKeyCREATE2Data, ChangePubKeyECDSAData, ChangePubKeyEthAuthData,
         ChangePubKeyType,
     },
+    create_pair::CreatePair,
     forced_exit::ForcedExit,
     transfer::Transfer,
     withdraw::Withdraw,

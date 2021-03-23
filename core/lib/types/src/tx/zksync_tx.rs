@@ -6,9 +6,10 @@ use zksync_basic_types::{AccountId, Address};
 
 use crate::{
     operations::ChangePubKeyOp,
-    tx::{ChangePubKey, Close, ForcedExit, Transfer, TxEthSignature, TxHash, Withdraw},
+    tx::{ChangePubKey, Close, CreatePair, ForcedExit, Transfer, TxEthSignature, TxHash, Withdraw},
     utils::deserialize_eth_message,
-    CloseOp, ForcedExitOp, Nonce, Token, TokenId, TokenLike, TransferOp, TxFeeTypes, WithdrawOp,
+    CloseOp, CreatePairOp, ForcedExitOp, Nonce, Token, TokenId, TokenLike, TransferOp, TxFeeTypes,
+    WithdrawOp,
 };
 use zksync_crypto::params::ETH_TOKEN_ID;
 
@@ -40,6 +41,7 @@ pub enum ZkSyncTx {
     Close(Box<Close>),
     ChangePubKey(Box<ChangePubKey>),
     ForcedExit(Box<ForcedExit>),
+    CreatePair(Box<CreatePair>),
 }
 
 impl From<Transfer> for ZkSyncTx {
@@ -135,6 +137,7 @@ impl ZkSyncTx {
             ZkSyncTx::Close(tx) => tx.nonce,
             ZkSyncTx::ChangePubKey(tx) => tx.nonce,
             ZkSyncTx::ForcedExit(tx) => tx.nonce,
+            // TODO: Create pair should be called from Layer1, so no need nonce
         }
     }
 
@@ -149,6 +152,7 @@ impl ZkSyncTx {
             ZkSyncTx::Close(_) => ETH_TOKEN_ID,
             ZkSyncTx::ChangePubKey(tx) => tx.fee_token,
             ZkSyncTx::ForcedExit(tx) => tx.token,
+            // TODO: for create pair, which token do we use for fee token?
         }
     }
 
@@ -163,6 +167,7 @@ impl ZkSyncTx {
             ZkSyncTx::Close(tx) => tx.check_correctness(),
             ZkSyncTx::ChangePubKey(tx) => tx.check_correctness(),
             ZkSyncTx::ForcedExit(tx) => tx.check_correctness(),
+            ZkSyncTx::CreatePair(tx) => tx.check_correctness(),
         }
     }
 
@@ -217,6 +222,9 @@ impl ZkSyncTx {
             ZkSyncTx::ForcedExit(tx) => {
                 Some(tx.get_ethereum_sign_message_part(&token.symbol, token.decimals))
             }
+            ZkSyncTx::CreatePair(tx) => {
+                Some(tx.get_ethereum_sign_message_part(&token.symbol, token.decimals))
+            }
             _ => None,
         }
     }
@@ -229,6 +237,7 @@ impl ZkSyncTx {
             ZkSyncTx::Close(tx) => tx.get_bytes(),
             ZkSyncTx::ChangePubKey(tx) => tx.get_bytes(),
             ZkSyncTx::ForcedExit(tx) => tx.get_bytes(),
+            ZkSyncTx::CreatePair(tx) => tx.get_bytes(),
         }
     }
 
@@ -242,6 +251,7 @@ impl ZkSyncTx {
             ZkSyncTx::Close(_) => CloseOp::CHUNKS,
             ZkSyncTx::ChangePubKey(_) => ChangePubKeyOp::CHUNKS,
             ZkSyncTx::ForcedExit(_) => ForcedExitOp::CHUNKS,
+            ZkSyncTx::CreatePair(_) => CreatePairOp::CHUNKS,
         }
     }
 
@@ -299,6 +309,7 @@ impl ZkSyncTx {
                 change_pubkey.account,
                 change_pubkey.fee.clone(),
             )),
+            // TODO: Do we need fee for create_pair?
             _ => None,
         }
     }
@@ -311,6 +322,7 @@ impl ZkSyncTx {
             ZkSyncTx::ChangePubKey(tx) => tx.time_range.unwrap_or_default().valid_from,
             ZkSyncTx::ForcedExit(tx) => tx.time_range.valid_from,
             ZkSyncTx::Close(tx) => tx.time_range.valid_from,
+            ZkSyncTx::CreatePair(tx) => tx.time_range.unwrap_or_default().valid_from,
         }
     }
 }

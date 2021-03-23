@@ -23,7 +23,8 @@ use zksync_crypto::params::{
 };
 use zksync_types::{
     operations::{ChangePubKeyOp, NoopOp},
-    CloseOp, DepositOp, ForcedExitOp, FullExitOp, TransferOp, TransferToNewOp, WithdrawOp,
+    CloseOp, CreatePairOp, DepositOp, ForcedExitOp, FullExitOp, TransferOp, TransferToNewOp,
+    WithdrawOp,
 };
 // Local deps
 use crate::{
@@ -42,7 +43,7 @@ use crate::{
     },
 };
 
-const DIFFERENT_TRANSACTIONS_TYPE_NUMBER: usize = 9;
+const DIFFERENT_TRANSACTIONS_TYPE_NUMBER: usize = 10; // Need to change this
 pub struct ZkSyncCircuit<'a, E: RescueEngine + JubjubEngine> {
     pub rescue_params: &'a <E as RescueEngine>::Params, // TF: meaning? A: curve parameters
     pub jubjub_params: &'a <E as JubjubEngine>::Params, // TF: meaning? A: curve parameters
@@ -193,7 +194,8 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
             data[WithdrawOp::OP_CODE as usize] = vec![zero.clone(); 2];
             data[FullExitOp::OP_CODE as usize] = vec![zero.clone(); 2];
             data[ChangePubKeyOp::OP_CODE as usize] = vec![zero.clone(); 2];
-            data[ForcedExitOp::OP_CODE as usize] = vec![zero; 2];
+            data[ForcedExitOp::OP_CODE as usize] = vec![zero.clone(); 2];
+            data[CreatePairOp::OP_CODE as usize] = vec![zero; 2];
 
             // this operation is disabled for now
             // data[CloseOp::OP_CODE as usize] = vec![];
@@ -230,6 +232,7 @@ impl<'a, E: RescueEngine + JubjubEngine> Circuit<E> for ZkSyncCircuit<'a, E> {
                         ForcedExitOp::OP_CODE,
                         FullExitOp::OP_CODE,
                         ChangePubKeyOp::OP_CODE,
+                        CreatePairOp::OP_CODE,
                     ];
 
                     let mut onchain_op_flags = Vec::new();
@@ -2578,6 +2581,27 @@ impl<'a, E: RescueEngine + JubjubEngine> ZkSyncCircuit<'a, E> {
             &[is_ohs_valid, lhs_valid, rhs_valid],
         )?;
         Ok(is_op_valid)
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn create_pair<CS: ConstraintSystem<E>>(
+        &self,
+        mut cs: CS,
+        cur: &mut AllocatedOperationBranch<E>,
+        lhs: &AllocatedOperationBranch<E>,
+        rhs: &AllocatedOperationBranch<E>,
+        global_variables: &CircuitGlobalVariables<E>,
+        is_a_geq_b: &Boolean,
+        is_account_empty: &Boolean,
+        op_data: &AllocatedOperationData<E>,
+        signer_key: &AllocatedSignerPubkey<E>,
+        ext_pubdata_chunk: &AllocatedNum<E>,
+        is_valid_timestamp: &Boolean,
+        is_sig_verified: &Boolean,
+        pubdata_holder: &mut Vec<AllocatedNum<E>>,
+    ) -> Result<Boolean, SynthesisError> {
+        // TODO:
+        //unimplemented!("");
     }
 
     fn verify_operation_timestamp<CS: ConstraintSystem<E>>(
